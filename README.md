@@ -1,7 +1,7 @@
 # trillium-error
 
 Error handler support for [trillium](https://trillium.rs) web framework.
-Refer to (trillium discussions on error handling)[https://github.com/trillium-rs/trillium/discussions/31].
+Refer to [trillium discussions on error handling](https://github.com/trillium-rs/trillium/discussions/31).
 
 
 # Usage
