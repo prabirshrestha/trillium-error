@@ -1,3 +1,49 @@
+/*!
+This crate adds support for error handling in [trillium](https://trillium.rs) web framework.
+
+Due to limitations in Rust, error handling is currently not supported in trillium. When the language
+adds capability to express bounds for `for<'a> Fn(&'a Conn) -> impl Future<Output=…> + 'a`, trillium
+will add first class support for error handling. Until then `trillium-error` provides
+a proc macro to help write handlers with error. For more details please refer to the discussion
+[here](https://github.com/trillium-rs/trillium/discussions/31).
+
+```ignore
+use trillium_error::handler;
+
+#[derive(thiserror::Error, Debug)]
+pub enum AppError {
+    #[error("Custom error")]
+    CustomError,
+    #[error("IO error")]
+    IoError(std::io::Error),
+}
+
+impl From<std::io::Error> for AppError {
+    fn from(err: std::io::Error) -> Self {
+        AppError::IoError(err)
+    }
+}
+
+#[async_trait]
+impl Handler for AppError {
+    async fn run(&self, conn: Conn) -> Conn {
+        conn.with_status(500).with_body("Internal Server Error")
+    }
+}
+
+#[handler]
+async fn helloworld(conn: &mut Conn) -> Result<(), AppError> {
+    conn.set_status(200);
+    conn.set_body("hello world");
+    // Ok(())
+    Err(AppError::CustomError)
+}
+
+fn main() {
+    trillium_tokio::run(helloworld);
+}
+```
+*/
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, Item};

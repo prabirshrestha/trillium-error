@@ -1,39 +1,16 @@
 # trillium-error
 
-Error handler support for [trillium](https://trillium.rs) web framework.
-Refer to [trillium discussions on error handling](https://github.com/trillium-rs/trillium/discussions/31).
+This crate adds support for error handling in [trillium](https://trillium.rs) web framework.
 
+Due to limitations in Rust, error handling is currently not supported in trillium. When the language
+adds capability to express bounds for `for<'a> Fn(&'a Conn) -> impl Future<Output=…> + 'a`, trillium
+will add first class support for error handling. For more details please refer to the discussion
+[here](https://github.com/trillium-rs/trillium/discussions/31). Until then `trillium-error` provides
+a proc macro to help write handlers with error.
 
 # Usage
 
-```rust
-#[macro_use]
-extern crate trillium_error;
-
-pub enum MyError {
-    BarError,
-    FooError,
-}
-
-#[async_trait]
-impl Handler for MyError {
-    async fn run(&self, conn: Conn) -> Conn {
-        conn.with_status(500).with_body("Internal Server Error")
-    }
-}
-
-#[handler]
-async fn helloworld(conn: &mut Conn) -> Result<(), MyError> {
-    conn.set_status(200);
-    conn.set_body("hello world");
-    // Ok(())
-    Err(MyError::FooError)
-}
-
-fn main() {
-    trillium_tokio::run(helloworld);
-}
-```
+Refer to the [docs](https://docs.rs/trillium-error/latest/trillium_error/).
 
 # LICENSE
 License under Apache 2.0 or MIT
