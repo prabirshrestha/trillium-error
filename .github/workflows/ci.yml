@@ -173,7 +173,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           use-cross: ${{ matrix.usecross }}
-          command: publish -p trillium-error
+          command: publish
 
   publish-release:
     name: publish-release
