@@ -124,6 +124,13 @@ jobs:
         command: build
         args: --verbose --locked --all --release --target ${{ matrix.target }}
 
+    - name: Build doc
+      uses: actions-rs/cargo@v1
+      with:
+        use-cross: ${{ matrix.usecross }}
+        command: doc
+        args: --verbose --locked --all --release --target ${{ matrix.target }}
+
     - name: Test
       uses: actions-rs/cargo@v1
       with:
