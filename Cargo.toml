@@ -14,5 +14,5 @@ categories = ["web-programming::http-server", "web-programming"]
 proc-macro = true
 
 [dependencies]
-quote = "1.0.28"
+quote = "1.0.31"
 syn = { version = "1.0.109", features = ["full", "parsing"] }
